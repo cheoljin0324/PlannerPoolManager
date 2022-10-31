@@ -152,7 +152,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce461e2c41972f34da2255d02fe47ad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newProfile: []
+  containerPrefab: {fileID: 0}
+  new1Profile:
+  - name: Test1
+    defalutAmount: 10
+    AddAmount: 1
+    prefabSet: {fileID: 3965663256107646291, guid: f94275f6c9e020e4b9596ed3e779f61d, type: 3}
+    container: {fileID: 0}
+    defalutVector: {x: 0, y: 0, z: 0}
 --- !u!4 &152607533
 Transform:
   m_ObjectHideFlags: 0

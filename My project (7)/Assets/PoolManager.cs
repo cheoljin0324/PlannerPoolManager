@@ -8,10 +8,16 @@ public class PoolManager : MonoBehaviour
     GameObject containerPrefab;
 
     [SerializeField]
-    PullProfile[] newProfile;
+    PullProfile[] new1Profile;
+
+    static PullProfile[] newProfile;
 
     private void Awake()
     {
+        for(int i = 0; i<new1Profile.Length; i++)
+        {
+            newProfile[i] = new1Profile[i];
+        }
         Init();
     }
 
@@ -33,23 +39,79 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-    public static void PullRequest(GameObject pullObject, Vector3 pos, Vector3 rotation)
+    public static void AddAmount(Queue<GameObject> set, GameObject addObject)
     {
-
+        set.Enqueue(Instantiate(addObject));
     }
 
-    public static void PullRequest(string objName)
+    public static GameObject PoolRequest(Queue<GameObject> set,GameObject pullObject, Vector3 pos, Quaternion rot)
+    {
+        if(set.Count == 0)
+        {
+            AddAmount(set, pullObject);
+        }
+        set.Peek().SetActive(true);
+        set.Peek().transform.position = pos;
+        set.Peek().transform.rotation = rot;
+
+        GameObject nowpeek = set.Peek();
+        set.Dequeue();
+        return nowpeek;
+    }
+
+
+
+    public static GameObject PoolRequest(string objName)
     {
         for(int i = 0; i<newProfile.Length; i++)
         {
             if(newProfile[i].name == objName)
             {
-                
+                return PoolRequest(newProfile[i].inConObject,newProfile[i].inConObject.Peek(), new Vector3(0, 0, 0), new Quaternion(0,0,0,0));
+            }
+        }
+
+        return null; 
+    }
+
+    public static GameObject PoolRequest(string objName, Vector3 pos)
+    {
+        for (int i = 0; i < newProfile.Length; i++)
+        {
+            if (newProfile[i].name == objName)
+            {
+                return PoolRequest(newProfile[i].inConObject,newProfile[i].inConObject.Peek(), pos, new Quaternion(0, 0, 0, 0));
+            }
+        }
+        return null; 
+    }
+
+    public static GameObject PoolRequest(string objName, Vector3 pos, Quaternion rot)
+    {
+        for (int i = 0; i < newProfile.Length; i++)
+        {
+            if (newProfile[i].name == objName)
+            {
+                return PoolRequest(newProfile[i].inConObject,newProfile[i].inConObject.Peek(), pos, rot);
+            }
+        }
+        return null; 
+    }
+
+    public static void CullObject(GameObject cullObject)
+    {
+        cullObject.SetActive(false);
+        cullObject.transform.position = new Vector3(0, 0, 0);
+        cullObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+
+        for (int i = 0; i < newProfile.Length; i++)
+        {
+            if (cullObject.transform.parent == newProfile[i].container)
+            {
+                newProfile[i].inConObject.Enqueue(cullObject);
             }
         }
     }
-
-
 }
 
 [System.Serializable]
