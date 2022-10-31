@@ -14,6 +14,8 @@ public class PoolManager : MonoBehaviour
 
     private void Awake()
     {
+        newProfile = new PullProfile[new1Profile.Length];
+
         for(int i = 0; i<new1Profile.Length; i++)
         {
             newProfile[i] = new1Profile[i];
@@ -34,6 +36,7 @@ public class PoolManager : MonoBehaviour
                 GameObject prefab = Instantiate(newProfile[i].prefabSet, newContainer.transform);
                 prefab.transform.position = newProfile[i].defalutVector;
                 prefab.transform.parent = newContainer.transform;
+                prefab.SetActive(false);
                 newProfile[i].inConObject.Enqueue(prefab);
             }
         }
